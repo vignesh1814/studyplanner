@@ -61,45 +61,77 @@ and DST quirks.
    if it misses no more deadlines than the strict one – so variety never costs a deadline.
 4. Sessions after a task's deadline are flagged and the UI warns you.
 
-## Build
+## Quick start (beginners)
+
+No programming experience needed. Pick your system.
+
+### Windows 10 / 11
+
+1. **Get the code.** Either
+   - click the green **Code** button on GitHub, choose **Download ZIP**, then right-click the
+     ZIP and **Extract All…**, or
+   - if you have Git: `git clone https://github.com/vignesh1814/studyplanner.git`
+2. Open the extracted `studyplanner` folder and **double-click `run_windows.bat`**.
+3. The first time, it installs everything it needs (MSYS2, a C compiler and GTK 4 – a few
+   hundred MB, takes several minutes). If Windows asks for permission, click **Yes**.
+   When it finishes, the app opens.
+4. Every later time, just double-click `run_windows.bat` again. It rebuilds only if the code
+   changed, then starts the app.
+
+> If the automatic install fails, install MSYS2 yourself from <https://www.msys2.org>
+> (keep the default folder `C:\msys64`) and double-click `run_windows.bat` again.
+> You can also double-click `setup_windows.bat` to redo just the installation step.
+
+To try it with sample data (nothing is saved), open Command Prompt in the folder and run
+`run_windows.bat --demo`.
+
+### Linux / macOS
+
+1. Get the code: `git clone https://github.com/vignesh1814/studyplanner.git` and
+   `cd studyplanner` (or download the ZIP and extract it).
+2. Install GTK 4 and a compiler (one command, pick yours):
+
+   ```bash
+   sudo apt install build-essential pkg-config libgtk-4-dev          # Ubuntu / Debian
+   sudo dnf install gcc make pkgconf-pkg-config gtk4-devel           # Fedora
+   sudo pacman -S base-devel gtk4                                    # Arch
+   brew install gtk4 pkg-config                                      # macOS (Homebrew)
+   ```
+3. Run:
+
+   ```bash
+   ./run.sh
+   ```
+
+   It builds the app and starts it. Run the same command any time you want to open it again.
+
+### Something went wrong?
+
+| Problem | Fix |
+| --- | --- |
+| `GTK 4 not found` | Install GTK 4 (step 2 above, or run `setup_windows.bat` on Windows). |
+| Windows: window flashes and closes | Run `run_windows.bat` from Command Prompt to see the error message. |
+| `./run.sh: Permission denied` | Run `chmod +x run.sh`, then try again. |
+| App starts but shows no data | Data lives in your user data folder (see [Usage](#usage)); try `--demo`. |
+
+## Manual build (for developers)
 
 You need a C11 compiler, `make`, `pkg-config` and the GTK 4 development files.
 
-### Windows (MSYS2)
-
 ```bash
-# in an MSYS2 UCRT64 shell
-pacman -S --needed mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gtk4 \
-                   mingw-w64-ucrt-x86_64-pkgconf mingw-w64-ucrt-x86_64-make
-mingw32-make
-./build/studyplanner.exe
+make          # build   -> build/studyplanner
+make test     # run the core unit tests
+make run      # build and launch
+make clean
 ```
 
-### Debian / Ubuntu
-
-```bash
-sudo apt install build-essential pkg-config libgtk-4-dev
-make && ./build/studyplanner
-```
-
-### Fedora
-
-```bash
-sudo dnf install gcc make pkgconf-pkg-config gtk4-devel
-make && ./build/studyplanner
-```
-
-### macOS (Homebrew)
-
-```bash
-brew install gtk4 pkg-config
-make && ./build/studyplanner
-```
+On Windows run these in an MSYS2 **UCRT64** shell and use `mingw32-make` instead of `make`
+(`pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gtk4 mingw-w64-ucrt-x86_64-pkgconf mingw-w64-ucrt-x86_64-make`).
 
 ## Usage
 
 ```bash
-make run                      # build and launch
+./run.sh                      # Linux/macOS (Windows: run_windows.bat)
 ./build/studyplanner --demo   # try it with sample data (nothing is saved)
 ./build/studyplanner --data my.dat   # use a specific data file
 ```
