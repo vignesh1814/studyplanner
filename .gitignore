@@ -1,0 +1,6 @@
+build/
+*.o
+*.exe
+*.dat
+*.dat.tmp
+*.dat.corrupt
